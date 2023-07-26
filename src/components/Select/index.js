@@ -16,7 +16,7 @@ const Select = ({
   const [value, setValue] = useState();
   const [collapsed, setCollapsed] = useState(true);
   const changeValue = (newValue) => {
-    onChange(newValue); // passing newValue to parent
+    onChange(newValue); // passe newValue a parent
     setValue(newValue);
     setCollapsed(true);
   };
