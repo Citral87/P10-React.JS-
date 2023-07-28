@@ -4,7 +4,11 @@ import Field, { FIELD_TYPES } from "../../components/Field";
 import Select from "../../components/Select";
 import Button, { BUTTON_TYPES } from "../../components/Button";
 
-const mockContactApi = () => new Promise((resolve) => { resolve(); }) // Résout immédiatement
+const mockContactApi = () => {
+  console.log('mockContactApi is called');
+  return new Promise((resolve) => { resolve(); });
+}
+
 
 
 const Form = ({ onSuccess, onError }) => {

@@ -18,7 +18,7 @@ describe("When Form is rendered", () => {
     
       fireEvent.click(submitButton);
     
-      await waitFor(() => expect(onSuccess).toHaveBeenCalled(), { timeout: 2000 });
+      await waitFor(() => expect(onSuccess).toHaveBeenCalled(), );
     });
   });
 });

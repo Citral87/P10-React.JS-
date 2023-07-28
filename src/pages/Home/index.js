@@ -13,8 +13,9 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const {last = { cover: "", title: "", date: "" }} = useData()
- 
+  const { data } = useData(); 
+  const last = data?.events?.[data.events.length - 1]; 
+  
   return <>
     <header>
       <Menu />
@@ -115,16 +116,22 @@ const Page = () => {
       </div>
     </main>
     <footer className="row">
-      <div className="col presta">
-        <h3>Notre derniére prestation</h3>
-        <EventCard
-          imageSrc={last?.cover}
-          title={last?.title}
-          date={new Date(last?.date)}
-          small
-          label="boom"
-          />
-      </div>
+  <div className="col presta">
+    <h3>Notre derniére prestation</h3>
+    
+    <div>
+    {last && (
+  <EventCard
+    data-testid="lastEventCard"
+    imageSrc={last.cover}
+   title={last.title}
+    date={new Date(last.date)} // Convertir la chaîne de date en une instance de Date
+    label="boom"
+  />
+)}
+
+</div>
+  </div>
       <div className="col contact">
         <h3>Contactez-nous</h3>
         <address>45 avenue de la République, 75000 Paris</address>
