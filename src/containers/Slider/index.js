@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
 
@@ -10,25 +10,34 @@ const Slider = () => {
   const byDateDesc = data?.focus.sort((evtA, evtB) =>
     new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
   );
+  
+  const timeoutRef = useRef(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    if(timeoutRef.current !== null){
+      clearTimeout(timeoutRef.current);
+    }
+    
+    timeoutRef.current = setTimeout(() => {
       setIndex((prevIndex) => {
-        // Si byDateDesc n'est pas chargé, ne faites rien
         if (!byDateDesc) {
           return prevIndex;
         }
-
-        // Si byDateDesc est chargé, incrémentez l'index
         return (prevIndex + 1) % byDateDesc.length;
       });
     }, 5000);
-    
-    // Nettoyez votre intervalle !
-    return () => clearInterval(interval);
-  }, [byDateDesc]);
 
-  // Assurez-vous que byDateDesc est chargé avant de rendre le slider
+    return () => {
+      if(timeoutRef.current !== null){
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [byDateDesc, index]);
+
+  const handleClick = (idx) => {
+    setIndex(idx);
+  };
+
   if (!byDateDesc) {
     return null;
   }
@@ -37,10 +46,8 @@ const Slider = () => {
     <div className="SlideCardList">
       {byDateDesc.map((event, idx) => (
         <div
-          key={event.title} 
-          className={`SlideCard SlideCard--${
-            index === idx ? "display" : "hide"
-          }`}
+          key={event.title}
+          className={`SlideCard SlideCard--${index === idx ? "display" : "hide"}`}
         >
           <img src={event.cover} alt="forum" />
           <div className="SlideCard__descriptionContainer">
@@ -54,11 +61,13 @@ const Slider = () => {
       ))}
       <div className="SlideCard__paginationContainer">
         <div className="SlideCard__pagination">
-          {byDateDesc.map((event, radioIdx) => (<input
+          {byDateDesc.map((event, radioIdx) => (
+            <input
               key={event.title}
               type="radio"
               name="radio-button"
               checked={index === radioIdx}
+              onChange={() => handleClick(radioIdx)}
               readOnly
             />
           ))}
