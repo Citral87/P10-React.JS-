@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";  // Ajout de useRef aux imports
 import { useData } from "../../contexts/DataContext";
 import { getMonth } from "../../helpers/Date";
 
@@ -11,13 +11,14 @@ const Slider = () => {
     new Date(evtA.date) > new Date(evtB.date) ? -1 : 1
   );
   
-  const timeoutRef = useRef(null);
+  const timeoutRef = useRef(null);  //  Création de la référence pour le timeout
 
   useEffect(() => {
-    if(timeoutRef.current !== null){
+    if(timeoutRef.current !== null){  //  Annulation du timeout précédent
       clearTimeout(timeoutRef.current);
     }
     
+    //  Démarrage d'un nouveau timeout (anciennement dans la fonction nextCard)
     timeoutRef.current = setTimeout(() => {
       setIndex((prevIndex) => {
         if (!byDateDesc) {
@@ -27,14 +28,15 @@ const Slider = () => {
       });
     }, 5000);
 
+    //  Annulation du timeout lorsque le composant est démonté
     return () => {
       if(timeoutRef.current !== null){
         clearTimeout(timeoutRef.current);
       }
     };
-  }, [byDateDesc, index]);
+  }, [byDateDesc, index]);  // Ajout de index aux dépendances de l'effet
 
-  const handleClick = (idx) => {
+  const handleClick = (idx) => {  // Ajout de la fonction handleClick
     setIndex(idx);
   };
 
@@ -63,12 +65,12 @@ const Slider = () => {
         <div className="SlideCard__pagination">
           {byDateDesc.map((event, radioIdx) => (
             <input
-              key={event.title}
+              key={event.title}  // Changement de la clé de l'input de pagination
               type="radio"
               name="radio-button"
               checked={index === radioIdx}
-              onChange={() => handleClick(radioIdx)}
-              readOnly
+              onChange={() => handleClick(radioIdx)}  //  Appel de handleClick lors du clic sur l'input
+              readOnly  //  Ajout de readOnly à l'input
             />
           ))}
         </div>
